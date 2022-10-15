@@ -1,6 +1,7 @@
 {
-  "name": "async-batcher",
+  "name": "conserial",
   "version": "0.1.0",
+  "description": "Run promises concurrently in a serial manner",
   "main": "dist/index.js",
   "repository": "https://github.com/rrmdn/async-batcher",
   "author": "Rizki Romadhoni",

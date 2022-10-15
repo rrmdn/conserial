@@ -3,8 +3,8 @@ class Result<Value> {
   promise: Promise<Value>;
 }
 
-export default class Batcher {
-  batch: Array<Promise<any>> = [];
+export default class Conserial {
+  promises: Array<Promise<any>> = [];
   async = <R, D extends Result<any>>(
     asyncFn: (...dependencies: D[]) => Promise<R>,
     dependencies: D[] = []
@@ -20,10 +20,10 @@ export default class Batcher {
         reject(error);
       }
     });
-    this.batch.push(result.promise);
+    this.promises.push(result.promise);
     return result;
   };
-  run = async () => {
-    await Promise.all(this.batch);
+  batch = async () => {
+    await Promise.all(this.promises);
   };
 }
