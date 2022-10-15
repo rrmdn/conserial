@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Run promises concurrently in a serial manner",
   "main": "dist/index.js",
-  "repository": "https://github.com/rrmdn/async-batcher",
+  "repository": "https://github.com/rrmdn/conserial",
   "author": "Rizki Romadhoni",
   "license": "MIT",
   "scripts": {
