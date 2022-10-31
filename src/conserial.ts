@@ -1,6 +1,8 @@
 class Result<Value> {
   value: Value;
   promise: Promise<Value>;
+  status: "pending" | "resolved" | "rejected";
+  error?: Error;
 }
 
 export default class Conserial {
@@ -11,12 +13,18 @@ export default class Conserial {
   ): Result<R> => {
     const result = new Result<R>();
     result.promise = new Promise<R>(async (resolve, reject) => {
+      result.status = "pending";
+      result.error = undefined;
       try {
         await Promise.all(dependencies.map((dependency) => dependency.promise));
         const val = await asyncFn(...dependencies);
         result.value = val;
+        result.status = "resolved";
         resolve(val);
       } catch (error) {
+        result.status = "rejected";
+        result.error = error;
+        result.value = undefined;
         reject(error);
       }
     });

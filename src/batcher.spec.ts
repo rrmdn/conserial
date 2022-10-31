@@ -8,6 +8,9 @@ describe("Conserial", () => {
       () =>
         new Promise<string>((resolve) => setTimeout(() => resolve("foo"), 200))
     );
+    expect(foo.status).toBe("pending");
+    expect(foo.value).toBe(undefined);
+    expect(foo.error).toBe(undefined);
     const bar = run.async(
       () =>
         new Promise<string>((resolve) => setTimeout(() => resolve("bar"), 200))
@@ -15,6 +18,7 @@ describe("Conserial", () => {
     await run.batch();
     // foo and bar should run in parallel
     expect(Date.now() - time).toBeLessThan(300);
+    expect(foo.status).toBe("resolved");
     expect(foo.value).toEqual("foo");
     expect(bar.value).toEqual("bar");
   });
@@ -59,11 +63,15 @@ describe("Conserial", () => {
           setTimeout(() => reject("bar"), 200)
         )
     );
+    expect(bar.status).toBe("pending");
+    expect(bar.value).toBe(undefined);
     await expect(run.batch()).rejects.toEqual("bar");
     // foo and bar should be resolved in parallel (200ms)
     // baz should not be resolved
     expect(Date.now() - time).toBeLessThan(300);
     expect(foo.value).toEqual("foo");
     expect(bar.value).toBeUndefined();
+    expect(bar.error).toEqual("bar");
+    expect(bar.status).toBe("rejected");
   })
 });
